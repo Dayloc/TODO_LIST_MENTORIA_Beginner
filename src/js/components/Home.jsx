@@ -3,23 +3,26 @@ import {
   CrearUsuario,
   fetchUsuarios,
   EliminarUsuario,
-} from "./services/fetchs";
+} from "../services/fetchs";
 import ListaTareas from "./ListaTareas";
 
 const Home = () => {
   const [userName, setUserName] = useState("");
   const [users, setUsers] = useState([]);
   const [usuarioCreado, setUsuarioCreado] = useState("");
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState("");
 
+  // Cargar usuarios desde el backend
   const cargarUsuarios = async () => {
     const usuarios = await fetchUsuarios();
     if (usuarios) {
       setUsers(usuarios);
     } else {
-      alert("Cargando usuarios...");
+      alert("Error al cargar usuarios.");
     }
   };
 
+  // Crear un nuevo usuario
   const handleCreateUser = async () => {
     if (userName.trim() === "") return;
     await CrearUsuario(userName);
@@ -28,8 +31,12 @@ const Home = () => {
     await cargarUsuarios();
   };
 
-  const handleDelete = async (userName) => {
-    await EliminarUsuario(userName);
+  // Eliminar un usuario
+  const handleDelete = async (name) => {
+    await EliminarUsuario(name);
+    if (usuarioSeleccionado === name) {
+      setUsuarioSeleccionado(""); // Limpiar selección si eliminamos al actual
+    }
     await cargarUsuarios();
   };
 
@@ -40,10 +47,13 @@ const Home = () => {
   return (
     <div className="contenedor">
       <h1 className="titulo">TODO_LIST</h1>
+
       <div className="fila">
         {/* Columna izquierda: Usuarios */}
         <div className="columna">
           <h2 className="titulo-columna">Usuarios</h2>
+
+          {/* Crear usuario */}
           <div className="crear-usuario">
             <input
               type="text"
@@ -51,6 +61,11 @@ const Home = () => {
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               className="input-usuario"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && userName.trim() !== "") {
+                  handleCreateUser();
+                }
+              }}
             />
             <button
               onClick={handleCreateUser}
@@ -61,6 +76,7 @@ const Home = () => {
             </button>
           </div>
 
+          {/* Lista de usuarios con radio */}
           <h3 className="subtitulo">Lista de Usuarios</h3>
           <ul className="lista-usuarios">
             {users.map((usuario, index) => (
@@ -70,7 +86,19 @@ const Home = () => {
                   usuario.name === usuarioCreado ? "usuario-creado" : ""
                 }`}
               >
-                <span>{usuario.name}</span>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="options-base"
+                  id={`option-${index}`}
+                  autoComplete="off"
+                  onChange={() => setUsuarioSeleccionado(usuario.name)}
+                  checked={usuarioSeleccionado === usuario.name}
+                />
+                <label className="btn" htmlFor={`option-${index}`}>
+                  {usuario.name}
+                </label>
+
                 <button
                   className="boton-eliminar"
                   onClick={() => handleDelete(usuario.name)}
@@ -84,8 +112,12 @@ const Home = () => {
 
         {/* Columna derecha: Tareas */}
         <div className="columna">
-          <h2 className="titulo-columna">Tareas</h2>
-          <ListaTareas />
+          <h2 className="titulo-columna">Tareas de {usuarioSeleccionado}</h2>
+          {usuarioSeleccionado ? (
+            <ListaTareas user={usuarioSeleccionado} />
+          ) : (
+            <p>Selecciona un usuario para ver sus tareas</p>
+          )}
         </div>
       </div>
     </div>

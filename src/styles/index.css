@@ -117,3 +117,19 @@ button.crear-tarea:hover {
     width: 100%;
   }
 }
+.btn-check:checked + .btn {
+  background-color: #28a745; /* Verde por ejemplo */
+  color: white;
+}
+.btn:hover {
+  background-color: #0056b3;
+}
+.btn {
+  background-color: #eef2f7;
+  color: rgb(231, 125, 125);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
