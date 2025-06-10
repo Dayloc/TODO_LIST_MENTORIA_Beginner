@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  CrearUsuario,
-  fetchUsuarios,
-  EliminarUsuario,
-} from "../services/fetchs";
+import {CrearUsuario,fetchUsuarios, EliminarUsuario} from "../services/fetchs";
 import ListaTareas from "./ListaTareas";
 
 const Home = () => {
@@ -54,7 +50,7 @@ const Home = () => {
           <h2 className="titulo-columna">Usuarios</h2>
 
           {/* Crear usuario */}
-          <div className="crear-usuario">
+          <div className="crear-usuario ">
             <input
               type="text"
               placeholder="Nombre de usuario"
@@ -76,29 +72,27 @@ const Home = () => {
             </button>
           </div>
 
-          {/* Lista de usuarios con radio */}
+        {/* Lista de usuarios */}
           <h3 className="subtitulo">Lista de Usuarios</h3>
           <ul className="lista-usuarios">
             {users.map((usuario, index) => (
               <li
                 key={index}
                 className={`usuario-item ${
-                  usuario.name === usuarioCreado ? "usuario-creado" : ""
+                  usuario.name ===usuarioCreado ? "usuario-creado" : ""
                 }`}
               >
-                <input
-                  type="radio"
-                  className="btn-check"
-                  name="options-base"
-                  id={`option-${index}`}
-                  autoComplete="off"
-                  onChange={() => setUsuarioSeleccionado(usuario.name)}
-                  checked={usuarioSeleccionado === usuario.name}
-                />
-                <label className="btn" htmlFor={`option-${index}`}>
+                
+                <div
+                   className={`usuario-item ${
+                  usuario.name === usuarioSeleccionado ? "usuario-seleccionado" : ""
+                }`}
+                 
+                  type="button"
+                  onClick={() => setUsuarioSeleccionado(usuario.name)}
+                >
                   {usuario.name}
-                </label>
-
+                </div>
                 <button
                   className="boton-eliminar"
                   onClick={() => handleDelete(usuario.name)}
