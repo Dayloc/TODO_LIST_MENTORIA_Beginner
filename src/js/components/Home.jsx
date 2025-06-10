@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {CrearUsuario,fetchUsuarios, EliminarUsuario} from "../services/fetchs";
+import {
+  CrearUsuario,
+  fetchUsuarios,
+  EliminarUsuario,
+} from "../services/fetchs";
 import ListaTareas from "./ListaTareas";
 
 const Home = () => {
@@ -42,7 +46,7 @@ const Home = () => {
 
   return (
     <div className="contenedor">
-      <h1 className="titulo">TODO_LIST</h1>
+      <h1 className="titulo">TODO_LIST_FETCH</h1>
 
       <div className="fila">
         {/* Columna izquierda: Usuarios */}
@@ -72,22 +76,22 @@ const Home = () => {
             </button>
           </div>
 
-        {/* Lista de usuarios */}
+          {/* Lista de usuarios */}
           <h3 className="subtitulo">Lista de Usuarios</h3>
           <ul className="lista-usuarios">
             {users.map((usuario, index) => (
               <li
                 key={index}
                 className={`usuario-item ${
-                  usuario.name ===usuarioCreado ? "usuario-creado" : ""
+                  usuario.name === usuarioCreado ? "usuario-creado" : ""
                 }`}
               >
-                
                 <div
-                   className={`usuario-item ${
-                  usuario.name === usuarioSeleccionado ? "usuario-seleccionado" : ""
-                }`}
-                 
+                  className={`usuario-item ${
+                    usuario.name === usuarioSeleccionado
+                      ? "usuario-seleccionado"
+                      : ""
+                  }`}
                   type="button"
                   onClick={() => setUsuarioSeleccionado(usuario.name)}
                 >
