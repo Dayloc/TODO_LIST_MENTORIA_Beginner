@@ -26,6 +26,9 @@ const Home = () => {
   const handleCreateUser = async () => {
     if (userName.trim() === "") return;
     await CrearUsuario(userName);
+
+    localStorage.setItem("Usuario", userName);
+
     setUserName("");
     setUsuarioCreado(userName);
     await cargarUsuarios();
@@ -43,6 +46,9 @@ const Home = () => {
   useEffect(() => {
     cargarUsuarios();
   }, []);
+
+  const usuarioGuardado = localStorage.getItem("Usuario");
+  console.log("Usuario guardado en localStorage:", usuarioGuardado);
 
   return (
     <div className="contenedor">
@@ -110,9 +116,9 @@ const Home = () => {
 
         {/* Columna derecha: Tareas */}
         <div className="columna">
-          <h2 className="titulo-columna">Tareas de {usuarioSeleccionado}</h2>
-          {usuarioSeleccionado ? (
-            <ListaTareas user={usuarioSeleccionado} />
+          <h2 className="titulo-columna">Tareas de {usuarioGuardado}</h2>
+          {usuarioGuardado ? (
+            <ListaTareas user={usuarioGuardado} />
           ) : (
             <p>Selecciona un usuario para ver sus tareas</p>
           )}
