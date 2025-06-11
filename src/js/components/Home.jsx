@@ -12,7 +12,6 @@ const Home = () => {
   const [usuarioCreado, setUsuarioCreado] = useState("");
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState("");
 
-  // Cargar usuarios desde el backend
   const cargarUsuarios = async () => {
     const usuarios = await fetchUsuarios();
     if (usuarios) {
@@ -22,19 +21,18 @@ const Home = () => {
     }
   };
 
-  // Crear un nuevo usuario
   const handleCreateUser = async () => {
     if (userName.trim() === "") return;
     await CrearUsuario(userName);
 
-    localStorage.setItem("Usuario", userName);
+    // Guardar el usuario en localStorage (opcional)
+    //localStorage.setItem("Usuario", userName);
 
     setUserName("");
     setUsuarioCreado(userName);
     await cargarUsuarios();
   };
 
-  // Eliminar un usuario
   const handleDelete = async (name) => {
     await EliminarUsuario(name);
     if (usuarioSeleccionado === name) {
@@ -47,8 +45,9 @@ const Home = () => {
     cargarUsuarios();
   }, []);
 
-  const usuarioGuardado = localStorage.getItem("Usuario");
-  console.log("Usuario guardado en localStorage:", usuarioGuardado);
+  // Para depuración: Verificar el usuario guardado en localStorage
+  //const usuarioGuardado = localStorage.getItem("Usuario");
+  //console.log("Usuario guardado en localStorage:", usuarioGuardado);
 
   return (
     <div className="contenedor">
@@ -116,9 +115,9 @@ const Home = () => {
 
         {/* Columna derecha: Tareas */}
         <div className="columna">
-          <h2 className="titulo-columna">Tareas de {usuarioGuardado}</h2>
-          {usuarioGuardado ? (
-            <ListaTareas user={usuarioGuardado} />
+          <h2 className="titulo-columna">Tareas de {usuarioSeleccionado}</h2>
+          {usuarioSeleccionado ? (
+            <ListaTareas user={usuarioSeleccionado} />
           ) : (
             <p>Selecciona un usuario para ver sus tareas</p>
           )}
